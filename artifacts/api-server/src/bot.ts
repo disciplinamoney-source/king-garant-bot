@@ -1,6 +1,5 @@
 import { Bot, Context, Keyboard, InlineKeyboard, session, SessionFlavor } from "grammy";
-import { eq } from "drizzle-orm";
-import { db, balancesTable, dealsTable } from "@workspace/db";
+import { eq, db, balancesTable, dealsTable } from "@workspace/db";
 import { logger } from "./lib/logger";
 
 const SUPPORT_USERNAME = "@king_helper";
