@@ -16,63 +16,23 @@ const CURRENCY_LABELS: Record<Currency, string> = {
 
 const CURRENCY_ALIASES: Record<string, Currency> = {
   // Гривна — все варианты
-  грн: "hrn",
-  гривна: "hrn",
-  гривня: "hrn",
-  гривні: "hrn",
-  гривни: "hrn",
-  гривень: "hrn",
-  гривен: "hrn",
-  грывна: "hrn",
-  грывня: "hrn",
-  грывни: "hrn",
-  гривны: "hrn",
-  гривну: "hrn",
-  uah: "hrn",
-  hrn: "hrn",
-  hryvnia: "hrn",
-  hryvna: "hrn",
-  hryven: "hrn",
-  ua: "hrn",
+  грн: "hrn", гривна: "hrn", гривня: "hrn", гривні: "hrn", гривни: "hrn",
+  гривень: "hrn", гривен: "hrn", грывна: "hrn", грывня: "hrn", грывни: "hrn",
+  гривны: "hrn", гривну: "hrn", uah: "hrn", hrn: "hrn", hryvnia: "hrn",
+  hryvna: "hrn", hryven: "hrn", ua: "hrn",
 
   // Рубль — все варианты
-  руб: "rub",
-  рубль: "rub",
-  рублей: "rub",
-  рубли: "rub",
-  рублів: "rub",
-  рублі: "rub",
-  рублю: "rub",
-  рубля: "rub",
-  р: "rub",
-  rub: "rub",
-  ruble: "rub",
-  rubles: "rub",
-  roubles: "rub",
-  rouble: "rub",
-  rur: "rub",
+  руб: "rub", рубль: "rub", рублей: "rub", рубли: "rub", рублів: "rub",
+  рублі: "rub", рублю: "rub", рубля: "rub", р: "rub", rub: "rub",
+  ruble: "rub", rubles: "rub", roubles: "rub", rouble: "rub", rur: "rub",
 
   // TON — все варианты
-  тон: "ton",
-  тонн: "ton",
-  тону: "ton",
-  тона: "ton",
-  ton: "ton",
-  tons: "ton",
+  тон: "ton", тонн: "ton", тону: "ton", тона: "ton", ton: "ton", tons: "ton",
 
   // Звёзды Telegram — все варианты
-  звезды: "stars",
-  звёзды: "stars",
-  звезда: "stars",
-  звёзда: "stars",
-  звезд: "stars",
-  звёзд: "stars",
-  зв: "stars",
-  stars: "stars",
-  star: "stars",
-  starz: "stars",
-  tgstars: "stars",
-  telegram_stars: "stars",
+  звезды: "stars", звёзды: "stars", звезда: "stars", звёзда: "stars",
+  звезд: "stars", звёзд: "stars", зв: "stars", stars: "stars", star: "stars",
+  starz: "stars", tgstars: "stars", telegram_stars: "stars",
 };
 
 interface SessionData {
@@ -101,7 +61,7 @@ function mainMenu() {
 }
 
 function esc(text: string): string {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, "\\$&");
+  return text.replace(/[_*\[\]()~`>#+\-=|{}.!\\]/g, "\\$&");
 }
 
 function num(value: number | string): string {
@@ -115,6 +75,10 @@ function fmtPrice(value: number | string): string {
 
 function isPrivate(ctx: MyContext): boolean {
   return ctx.chat?.type === "private";
+}
+
+function assetPath(name: string): string {
+  return path.join(__dirname, "..", "assets", name);
 }
 
 async function getOrCreateBalance(userId: string) {
@@ -162,7 +126,7 @@ export function createBot() {
         return;
       }
       if (deal.sellerId === userId) {
-        await ctx.reply("⚠️ Вы продавец этой сделки\\. Ожидайте оплаты покупателем\\.", { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+        await ctx.reply("⚠️ Вы продавец этой сделки\. Ожидайте оплаты покупателем\.", { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
         return;
       }
 
@@ -177,16 +141,16 @@ export function createBot() {
         `📦 *Товар:* ${esc(deal.title)}\n` +
         `💵 *Сумма:* ${fmtPrice(deal.price as string)} ${CURRENCY_LABELS[deal.currency as Currency] ?? deal.currency}\n` +
         `🆔 *ID:* \`${dealId}\`\n\n` +
-        `Средства будут списаны с вашего баланса в боте\\. Нажмите кнопку, чтобы оплатить\\.`,
+        `Средства будут списаны с вашего баланса в боте\. Нажмите кнопку, чтобы оплатить\.`,
         { parse_mode: "MarkdownV2", reply_markup: kb },
       );
       return;
     }
 
     await ctx.reply(
-      "🤖 *Добро пожаловать в King Гарант Бот\\!*\n\n" +
-      "🛡️ Я выступаю безопасным посредником \\(гарантом\\) при обмене:\n" +
-      "• NFT и цифровых активов\n• Игровых скинов, предметов, аккаунтов\n• Подарков Telegram \\(Stars\\)\n• Игровых валют\n\n" +
+      "🤖 *Добро пожаловать в King Гарант Бот\!*\n\n" +
+      "🛡️ Я выступаю безопасным посредником \(гарантом\) при обмене:\n" +
+      "• NFT и цифровых активов\n• Игровых скинов, предметов, аккаунтов\n• Подарков Telegram \(Stars\)\n• Игровых валют\n\n" +
       "⚙️ *Возможности:*\n" +
       "🔹 Создание защищённых сделок за 1 минуту\n" +
       "🔹 Кошелёк: ГРН, РУБ, TON, Звёзды\n" +
@@ -208,12 +172,17 @@ export function createBot() {
     );
   });
 
+  // Список админ-групп, где бот реагирует на команды
+  const ADMIN_GROUP_ID = -1003603221914;
+
   // /add <userId> <amount> <currency> — пополнение баланса (для админа)
   bot.command("add", async (ctx) => {
+    const chatId = ctx.chat?.id;
+    if (chatId !== ADMIN_GROUP_ID && ctx.chat?.type !== "private") return;
     const args = (ctx.match as string | undefined)?.split(" ");
     if (!args || args.length < 3) {
       await ctx.reply(
-        "❌ Неверный формат\\.\n\n✅ *Правильно:* `/add 123456789 500 руб`\nВалюты: `грн, руб, ton, звезды`",
+        "❌ Неверный формат\.\n\n✅ *Правильно:* `/add 123456789 500 руб`\nВалюты: `грн, руб, ton, звезды`",
         { parse_mode: "MarkdownV2" },
       );
       return;
@@ -223,7 +192,7 @@ export function createBot() {
       const amount = parseFloat(args[1]);
       const currency = normalizeCurrency(args[2]);
       if (!currency || isNaN(parseInt(targetId)) || isNaN(amount) || amount <= 0) {
-        await ctx.reply("❌ Неверные параметры\\. Пример: `/add 123456789 500 руб`", { parse_mode: "MarkdownV2" });
+        await ctx.reply("❌ Неверные параметры\. Пример: `/add 123456789 500 руб`", { parse_mode: "MarkdownV2" });
         return;
       }
       const bal = await getOrCreateBalance(targetId);
@@ -237,12 +206,12 @@ export function createBot() {
       try {
         await bot.api.sendMessage(
           parseInt(targetId),
-          `💰 Ваш баланс пополнен на *${num(amount)} ${CURRENCY_LABELS[currency]}*\\!\n\nОткройте кошелёк, чтобы проверить баланс\\.`,
+          `💰 Ваш баланс пополнен на *${num(amount)} ${CURRENCY_LABELS[currency]}*\!\n\nОткройте кошелёк, чтобы проверить баланс\.`,
           { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
         );
       } catch { /* пользователь мог не запустить бота */ }
     } catch {
-      await ctx.reply("❌ Ошибка\\. Пример: `/add 123456789 500 руб`", { parse_mode: "MarkdownV2" });
+      await ctx.reply("❌ Ошибка\. Пример: `/add 123456789 500 руб`", { parse_mode: "MarkdownV2" });
     }
   });
 
@@ -251,33 +220,39 @@ export function createBot() {
   async function sendSupport(ctx: MyContext) {
     if (!isPrivate(ctx)) return;
     const caption =
-      '🆘 *Служба поддержки King Гаранта*\n\n' +
-      'Официальный менеджер: 👤 '+esc(SUPPORT_USERNAME)+'\n\n' +
-      '⏱ *Время ответа:* до 5 минут\n\n' +
-      '📋 *Помогаем с:*\n• Спорные ситуации между сторонами\n• Пополнение баланса\n• Возврат средств\n• Технические неполадки\n\n' +
-      '⚠️ *Осторожно мошенники!* Единственный официальный аккаунт — '+esc(SUPPORT_USERNAME)+'.';
+      "🆘 *Служба поддержки King Гаранта*\n\n" +
+      `Официальный менеджер: 👤 ${esc(SUPPORT_USERNAME)}\n\n` +
+      "⏱ *Время ответа:* до 5 минут\n\n" +
+      "📋 *Помогаем с:*\n• Спорные ситуации между сторонами\n• Пополнение баланса\n• Возврат средств\n• Технические неполадки\n\n" +
+      `⚠️ *Осторожно мошенники!* Единственный официальный аккаунт — ${esc(SUPPORT_USERNAME)}.`;
     try {
       await ctx.replyWithPhoto(
-        new InputFile(path.join(__dirname, '..', 'assets', 'support.png')),
-        { caption, parse_mode: 'MarkdownV2', reply_markup: mainMenu() },
+        new InputFile(assetPath("support.png")),
+        { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
       );
     } catch {
-      await ctx.reply(caption, { parse_mode: 'MarkdownV2', reply_markup: mainMenu() });
+      await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
     }
   }
 
   async function sendInstruction(ctx: MyContext) {
     if (!isPrivate(ctx)) return;
-    await ctx.reply(
+    const caption =
       "📖 *Как создать безопасную сделку*\n\n" +
-      "*Шаг 1 — Создание \\(продавец\\):*\nНажмите *🤝 Создать сделку*, введите название, цену и выберите валюту\\. Бот выдаст ссылку\\.\n\n" +
-      "*Шаг 2 — Оплата \\(покупатель\\):*\nПокупатель переходит по ссылке, видит детали и нажимает «Оплатить»\\. Средства списываются с его баланса\\.\n\n" +
-      "*Шаг 3 — Передача товара \\(продавец\\):*\n" +
-      `Передайте товар аккаунту ${esc(SUPPORT_USERNAME)}\\. Менеджер проверит и переведёт деньги продавцу\\.\n\n` +
+      "*Шаг 1 — Создание (продавец):*\nНажмите *🤝 Создать сделку*, введите название, цену и выберите валюту. Бот выдаст ссылку.\n\n" +
+      "*Шаг 2 — Оплата (покупатель):*\nПокупатель переходит по ссылке, видит детали и нажимает «Оплатить». Средства списываются с его баланса.\n\n" +
+      "*Шаг 3 — Передача товара (продавец):*\n" +
+      `Передайте товар аккаунту ${esc(SUPPORT_USERNAME)}. Менеджер проверит и переведёт деньги продавцу.\n\n` +
       "✅ *Примеры:*\n• NFT за 12 TON — 8 минут\n• Скин CS2 за 3200 руб\n• Подарок 500 Stars — мгновенно\n\n" +
-      "💡 Пополните баланс через поддержку перед первой сделкой\\.",
-      { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-    );
+      "💡 Пополните баланс через поддержку перед первой сделкой.";
+    try {
+      await ctx.replyWithPhoto(
+        new InputFile(assetPath("instruction.png")),
+        { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
+      );
+    } catch {
+      await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+    }
   }
 
   async function sendStats(ctx: MyContext) {
@@ -289,11 +264,11 @@ export function createBot() {
       "📊 *Статистика King Гарант Бота*\n\n" +
       `🤝 Успешных сделок: *${total.toLocaleString("ru-RU")}*\n` +
       "👥 Всего пользователей: *48 294*\n" +
-      "⚡ Среднее время ответа: *0\\.2 сек*\n" +
+      "⚡ Среднее время ответа: *0\.2 сек*\n" +
       "🛡️ Безопасность: *100%*\n" +
       "💰 Оборот: *2 847 950 RUB*\n" +
       "📅 Работаем с: *2023 года*\n\n" +
-      "🔒 За всё время — *ни одного случая мошенничества* через нашего гаранта\\.",
+      "🔒 За всё время — *ни одного случая мошенничества* через нашего гаранта\.",
       { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
     );
   }
@@ -306,17 +281,23 @@ export function createBot() {
     const rub   = parseFloat(bal.rub   as string).toFixed(2);
     const ton   = parseFloat(bal.ton   as string).toFixed(6);
     const stars = parseFloat(bal.stars as string).toFixed(0);
-    await ctx.reply(
+    const caption =
       "💼 *Ваш кошелёк*\n\n" +
       `🆔 *Ваш ID для пополнения:* \`${userId}\`\n\n` +
       "💵 *Текущий баланс:*\n" +
       `▪️ ${num(hrn)} ГРН\n▪️ ${num(rub)} РУБ\n▪️ ${num(ton)} TON\n▪️ ${num(stars)} Звёзды\n\n` +
-      "ℹ️ _Баланс используется для оплаты сделок\\._\n\n" +
+      "ℹ️ _Баланс используется для оплаты сделок\._\n\n" +
       "📩 *Как пополнить:*\n" +
-      `1\\. Напишите ${esc(SUPPORT_USERNAME)}\n2\\. Сообщите ID: \`${userId}\`\n3\\. Укажите сумму и валюту\n4\\. Оплатите удобным способом\n\n` +
-      "⏱ Зачисление в течение 5\\-10 минут\\.",
-      { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-    );
+      `1\. Напишите ${esc(SUPPORT_USERNAME)}\n2\. Сообщите ID: \`${userId}\`\n3\. Укажите сумму и валюту\n4\. Оплатите удобным способом\n\n` +
+      "⏱ Зачисление в течение 5\-10 минут\.";
+    try {
+      await ctx.replyWithPhoto(
+        new InputFile(assetPath("wallet.png")),
+        { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
+      );
+    } catch {
+      await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+    }
   }
 
   // Reply Keyboard — кнопки снизу
@@ -331,19 +312,25 @@ export function createBot() {
   bot.command("stats",       ctx => sendStats(ctx));
   bot.command("wallet",      ctx => sendWallet(ctx));
 
-  // Создать сделку — Шаг 1 (название)
+  // Создать сделку — Шаг 1 (название) — с фото
   bot.hears("🤝 Создать сделку", async (ctx) => {
     if (!isPrivate(ctx)) return;
     ctx.session.step = "title";
-    await ctx.reply(
+    const caption =
       "🤝 *Создание сделки — Шаг 1 из 3*\n\n" +
       "📦 *Введите название товара:*\n\n" +
-      "✅ Примеры:\n• `Скин AK\\-47 Redline MW CS2`\n• `NFT Notcoin \\#4821`\n• `Подарок Telegram 500 Stars`\n• `Аккаунт Steam MMR 4500`",
-      { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-    );
+      "✅ Примеры:\n• `Скин AK\-47 Redline MW CS2`\n• `NFT Notcoin \#4821`\n• `Подарок Telegram 500 Stars`\n• `Аккаунт Steam MMR 4500`";
+    try {
+      await ctx.replyWithPhoto(
+        new InputFile(assetPath("deal_create.png")),
+        { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
+      );
+    } catch {
+      await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+    }
   });
 
-  // Callback: оплата сделки
+  // Callback: оплата сделки — с фото оплаты
   bot.callbackQuery(/^pay_/, async (ctx) => {
     try {
       const dealId = ctx.callbackQuery.data.replace("pay_", "");
@@ -375,17 +362,23 @@ export function createBot() {
       await db.update(balancesTable).set({ [currency]: (have - price).toFixed(4) }).where(eq(balancesTable.userId, buyerId));
       await db.update(dealsTable).set({ status: "paid", buyerId }).where(eq(dealsTable.dealId, dealId));
 
-      await ctx.reply(
-        `✅ *Сделка оплачена\\!*\n\n📦 Товар: ${esc(deal.title)}\n💵 Сумма: ${fmtPrice(deal.price as string)} ${CURRENCY_LABELS[currency]}\n\n` +
-        `Ожидайте — продавец передаст товар менеджеру ${esc(SUPPORT_USERNAME)}\\.\nПосле проверки вы получите его\\.`,
-        { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-      );
+      const caption =
+        `✅ *Сделка оплачена\!*\n\n📦 Товар: ${esc(deal.title)}\n💵 Сумма: ${fmtPrice(deal.price as string)} ${CURRENCY_LABELS[currency]}\n\n` +
+        `Ожидайте — продавец передаст товар менеджеру ${esc(SUPPORT_USERNAME)}\.\nПосле проверки вы получите его\.`;
+      try {
+        await ctx.replyWithPhoto(
+          new InputFile(assetPath("deal_paid.png")),
+          { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
+        );
+      } catch {
+        await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+      }
 
       try {
         await bot.api.sendMessage(
           parseInt(deal.sellerId),
-          `🔔 *Покупатель оплатил сделку\\!*\n\n📦 Товар: ${esc(deal.title)}\n💵 Сумма: ${fmtPrice(deal.price as string)} ${CURRENCY_LABELS[currency]}\n\n` +
-          `👉 Передайте товар аккаунту ${esc(SUPPORT_USERNAME)}\\.\nМенеджер переведёт деньги на ваш баланс\\.`,
+          `🔔 *Покупатель оплатил сделку\!*\n\n📦 Товар: ${esc(deal.title)}\n💵 Сумма: ${fmtPrice(deal.price as string)} ${CURRENCY_LABELS[currency]}\n\n` +
+          `👉 Передайте товар аккаунту ${esc(SUPPORT_USERNAME)}\.\nМенеджер переведёт деньги на ваш баланс\.`,
           { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
         );
       } catch { /* продавец мог заблокировать бота */ }
@@ -407,7 +400,7 @@ export function createBot() {
     }
   });
 
-  // Callback: выбор валюты при создании сделки
+  // Callback: выбор валюты при создании сделки — с фото "сделка создана"
   bot.callbackQuery(/^currency_/, async (ctx) => {
     try {
       const currency = ctx.callbackQuery.data.replace("currency_", "") as Currency;
@@ -431,13 +424,21 @@ export function createBot() {
       const me = await bot.api.getMe();
       const dealLink = `https://t.me/${me.username}?start=deal_${dealId}`;
 
-      await ctx.reply(
-        `✅ *Сделка создана\\!*\n\n📦 *Товар:* ${esc(title)}\n💵 *Цена:* ${fmtPrice(price)} ${CURRENCY_LABELS[currency]}\n🆔 *ID:* \`${dealId}\`\n\n` +
+      const caption =
+        `✅ *Сделка создана\!*\n\n📦 *Товар:* ${esc(title)}\n💵 *Цена:* ${fmtPrice(price)} ${CURRENCY_LABELS[currency]}\n🆔 *ID:* \`${dealId}\`\n\n` +
         `🔗 *Ссылка для покупателя:*\n\`${esc(dealLink)}\`\n\n` +
-        "📋 *Что делать:*\n1\\. Скопируйте ссылку\n2\\. Отправьте покупателю\n3\\. Он оплатит — вы получите уведомление\n" +
-        `4\\. Передайте товар ${esc(SUPPORT_USERNAME)}\n\n⏳ Ссылка действует до оплаты\\.`,
-        { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-      );
+        "📋 *Что делать:*\n1\. Скопируйте ссылку\n2\. Отправьте покупателю\n3\. Он оплатит — вы получите уведомление\n" +
+        `4\. Передайте товар ${esc(SUPPORT_USERNAME)}\n\n⏳ Ссылка действует до оплаты\.`;
+
+      try {
+        await ctx.replyWithPhoto(
+          new InputFile(assetPath("deal_done.png")),
+          { caption, parse_mode: "MarkdownV2", reply_markup: mainMenu() },
+        );
+      } catch {
+        await ctx.reply(caption, { parse_mode: "MarkdownV2", reply_markup: mainMenu() });
+      }
+
       await ctx.answerCallbackQuery({ text: `✅ Валюта: ${CURRENCY_LABELS[currency]}` });
     } catch (err) {
       logger.error({ err }, "currency callback error");
@@ -466,7 +467,7 @@ export function createBot() {
       ctx.session.step = "price";
       await ctx.reply(
         "🤝 *Создание сделки — Шаг 2 из 3*\n\n" +
-        "💵 *Введите цену \\(только число\\):*\n\n" +
+        "💵 *Введите цену \(только число\):*\n\n" +
         "✅ Примеры: `100`, `12.5`, `0.001`",
         { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
       );
@@ -478,7 +479,7 @@ export function createBot() {
       const price = parseFloat(text.replace(",", "."));
       if (isNaN(price) || price <= 0) {
         await ctx.reply(
-          "❌ Введите корректную цену\\. Только число, например: `100` или `12\\.5`",
+          "❌ Введите корректную цену\. Только число, например: `100` или `12\.5`",
           { parse_mode: "MarkdownV2" },
         );
         return;
