@@ -1,4 +1,4 @@
-import { Bot, Context, Keyboard, InlineKeyboard, session, SessionFlavor } from "grammy";
+import { Bot, Context, Keyboard, InlineKeyboard, session, SessionFlavor, InputFile } from "grammy";
 import { eq, db, balancesTable, dealsTable } from "@workspace/db";
 import { logger } from "./lib/logger";
 
@@ -249,14 +249,20 @@ export function createBot() {
 
   async function sendSupport(ctx: MyContext) {
     if (!isPrivate(ctx)) return;
-    await ctx.reply(
-      "🆘 *Служба поддержки King Гаранта*\n\n" +
-      `Официальный менеджер: 👤 ${esc(SUPPORT_USERNAME)}\n\n` +
-      "⏱ *Время ответа:* до 5 минут\n\n" +
-      "📋 *Помогаем с:*\n• Спорные ситуации между сторонами\n• Пополнение баланса\n• Возврат средств\n• Технические неполадки\n\n" +
-      `⚠️ *Осторожно мошенники\\!* Единственный официальный аккаунт — ${esc(SUPPORT_USERNAME)}\\.`,
-      { parse_mode: "MarkdownV2", reply_markup: mainMenu() },
-    );
+    const caption =
+      '🆘 *Служба поддержки King Гаранта*\n\n' +
+      'Официальный менеджер: 👤 '+esc(SUPPORT_USERNAME)+'\n\n' +
+      '⏱ *Время ответа:* до 5 минут\n\n' +
+      '📋 *Помогаем с:*\n• Спорные ситуации между сторонами\n• Пополнение баланса\n• Возврат средств\n• Технические неполадки\n\n' +
+      '⚠️ *Осторожно мошенники!* Единственный официальный аккаунт — '+esc(SUPPORT_USERNAME)+'.';
+    try {
+      await ctx.replyWithPhoto(
+        new InputFile('/home/runner/workspace/artifacts/api-server/assets/support.png'),
+        { caption, parse_mode: 'MarkdownV2', reply_markup: mainMenu() },
+      );
+    } catch {
+      await ctx.reply(caption, { parse_mode: 'MarkdownV2', reply_markup: mainMenu() });
+    }
   }
 
   async function sendInstruction(ctx: MyContext) {
