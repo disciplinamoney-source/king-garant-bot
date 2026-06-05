@@ -1,6 +1,7 @@
 import { Bot, Context, Keyboard, InlineKeyboard, session, SessionFlavor, InputFile } from "grammy";
 import { eq, db, balancesTable, dealsTable } from "@workspace/db";
 import { logger } from "./lib/logger";
+import path from "path";
 
 const SUPPORT_USERNAME = "@king_helper";
 
@@ -257,7 +258,7 @@ export function createBot() {
       '⚠️ *Осторожно мошенники!* Единственный официальный аккаунт — '+esc(SUPPORT_USERNAME)+'.';
     try {
       await ctx.replyWithPhoto(
-        new InputFile('/home/runner/workspace/artifacts/api-server/assets/support.png'),
+        new InputFile(path.join(__dirname, '..', 'assets', 'support.png')),
         { caption, parse_mode: 'MarkdownV2', reply_markup: mainMenu() },
       );
     } catch {
