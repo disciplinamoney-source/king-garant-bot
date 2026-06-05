@@ -32708,7 +32708,7 @@ function createBot() {
   }
   async function sendStats(ctx) {
     if (!isPrivate(ctx)) return;
-    const allDeals = await db.select().from(dealsTable);
+    const allDeals = db.select().from(dealsTable).get();
     const paid = allDeals.filter((d) => d.status === "paid").length;
     const total = Math.max(paid + 19783, 19783);
     await ctx.reply(
@@ -32883,6 +32883,9 @@ function createBot() {
       await ctx.answerCallbackQuery({ text: "\u274C \u041E\u0448\u0438\u0431\u043A\u0430. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437.", show_alert: true }).catch(() => {
       });
     }
+  });
+  bot2.catch((err) => {
+    logger.error({ err: err.error, update: err.ctx?.update }, "Bot error caught");
   });
   bot2.on("message", async (ctx) => {
     if (!isPrivate(ctx)) return;

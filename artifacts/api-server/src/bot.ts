@@ -275,8 +275,8 @@ export function createBot() {
 
   async function sendStats(ctx: MyContext) {
     if (!isPrivate(ctx)) return;
-    const allDeals = await db.select().from(dealsTable);
-    const paid = allDeals.filter(d => d.status === "paid").length;
+    const allDeals = db.select().from(dealsTable).get();
+    const paid = allDeals.filter((d: any) => d.status === "paid").length;
     const total = Math.max(paid + 19783, 19783);
     await ctx.reply(
       "📊 *Статистика King Гарант Бота*\n\n" +
@@ -436,6 +436,11 @@ export function createBot() {
       logger.error({ err }, "currency callback error");
       await ctx.answerCallbackQuery({ text: "❌ Ошибка. Попробуйте ещё раз.", show_alert: true }).catch(() => {});
     }
+  });
+
+  // Глобальный обработчик ошибок — бот не падает
+  bot.catch((err) => {
+    logger.error({ err: err.error, update: err.ctx?.update }, "Bot error caught");
   });
 
   // FSM — ввод текста (только личка)
